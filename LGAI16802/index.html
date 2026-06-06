@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="zh-Hant">
 <head>
@@ -21,8 +22,8 @@
 <script>
 window.APP_CONFIG = {
   PIXEL_ID: '3055978374595290',
-  LINE_URL: 'https://lin.ee/jzABNet',
-  REDIRECT_DELAY: 800
+  LINE_URL: 'https://line.me/R/ti/p/@807haihf',
+  REDIRECT_DELAY: 900
 };
 
 !function(f,b,e,v,n,t,s){
@@ -43,41 +44,136 @@ window.APP_CONFIG = {
 }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
 fbq('init', window.APP_CONFIG.PIXEL_ID);
-fbq('track', 'PageView');
+fbq('trackSingle', window.APP_CONFIG.PIXEL_ID, 'PageView');
 </script>
 
 <noscript>
   <img height="1" width="1" style="display:none" alt=""
-    src="https://www.facebook.com/tr?id=3055978374595290&ev=PageView&noscript=1"/>
+       src="https://www.facebook.com/tr?id=3055978374595290&ev=PageView&noscript=1"/>
 </noscript>
 
 <style>
-*{box-sizing:border-box;}
-body{margin:0;background:#000;font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC",Arial,sans-serif;}
-.wrapper{display:flex;justify-content:center;align-items:center;min-height:100vh;min-height:100dvh;}
-.frame{position:relative;width:100%;max-width:420px;aspect-ratio:9/16;overflow:hidden;background:#000;}
-.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;user-select:none;-webkit-user-drag:none;}
-.logo{position:absolute;top:5%;left:10%;transform:translateX(10%);width:60%;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;}
-.ip{position:absolute;bottom:30%;left:50%;transform:translateX(-50%);width:90%;display:block;pointer-events:none;user-select:none;-webkit-user-drag:none;}
-.btnWrapper{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);width:80%;z-index:5;}
-#lineBtn{display:block;}
-.goLine{display:block;width:100%;text-decoration:none;-webkit-tap-highlight-color:transparent;outline:none;}
-.btn{width:100%;cursor:pointer;display:block;animation:breath 1.8s ease-in-out infinite;user-select:none;-webkit-user-drag:none;}
-.goLine.is-disabled{pointer-events:none;opacity:.98;}
-@keyframes breath{0%{transform:scale(1);}50%{transform:scale(1.08);}100%{transform:scale(1);}}
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+  background:#000;
+  font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC",Arial,sans-serif;
+}
+
+.wrapper{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  min-height:100svh;
+  background:#000;
+}
+
+.frame{
+  position:relative;
+  width:100%;
+  max-width:420px;
+  aspect-ratio:9/16;
+  overflow:hidden;
+  background:#000;
+}
+
+.bg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:1;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+.logo{
+  position:absolute;
+  top:5%;
+  left:10%;
+  transform:translateX(10%);
+  width:60%;
+  display:block;
+  z-index:2;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+.ip{
+  position:absolute;
+  bottom:30%;
+  left:50%;
+  transform:translateX(-50%);
+  width:90%;
+  z-index:3;
+  pointer-events:none;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+.btnWrapper{
+  position:absolute;
+  bottom:3%;
+  left:50%;
+  transform:translateX(-50%);
+  width:80%;
+  z-index:10;
+}
+
+.goLine{
+  display:block;
+  width:100%;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  text-decoration:none;
+  outline:none;
+}
+
+.btn{
+  display:block;
+  width:100%;
+  height:auto;
+  cursor:pointer;
+  animation:breath 1.8s ease-in-out infinite;
+  will-change:transform;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+@keyframes breath{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+  100%{transform:scale(1);}
+}
 </style>
 </head>
 
 <body>
 <div class="wrapper">
   <div class="frame">
-    <img src="assets/bg.jpg" class="bg" alt="" loading="eager">
-    <img src="assets/logo.png" class="logo" alt="" loading="eager">
-    <img src="assets/ip.png" class="ip" alt="" loading="eager">
+    <img src="assets/bg.jpg" class="bg" alt="" loading="eager" decoding="async">
+    <img src="assets/logo.png" class="logo" alt="" loading="eager" decoding="async">
+    <img src="assets/ip.png" class="ip" alt="" loading="eager" decoding="async">
 
+    <!-- 只有真正按鈕 Btn 可以點擊 -->
     <div class="btnWrapper">
-      <a href="https://lin.ee/jzABNet" class="goLine" data-area="main_cta" id="lineBtn" rel="noopener" aria-label="加入官方LINE">
-        <img src="assets/btn.png" class="btn" alt="加入官方LINE" loading="eager">
+      <a href="https://line.me/R/ti/p/@807haihf"
+         class="goLine"
+         data-area="btn"
+         id="lineBtn"
+         rel="noopener"
+         aria-label="加入官方LINE">
+        <img src="assets/btn.png" class="btn" alt="加入官方LINE" loading="eager" decoding="async">
       </a>
     </div>
   </div>
@@ -85,91 +181,95 @@ body{margin:0;background:#000;font-family:system-ui,-apple-system,"PingFang TC",
 
 <script>
 (function(){
-  var LINE_URL = window.APP_CONFIG.LINE_URL;
-  var REDIRECT_DELAY = window.APP_CONFIG.REDIRECT_DELAY;
+  const PIXEL_ID = window.APP_CONFIG.PIXEL_ID;
+  const LINE_URL = window.APP_CONFIG.LINE_URL;
+  const REDIRECT_DELAY = window.APP_CONFIG.REDIRECT_DELAY;
 
-  var links = document.querySelectorAll('.goLine');
-  if (!links || !links.length) return;
+  const btn = document.getElementById('lineBtn');
+  if(!btn) return;
 
-  var clicked = false;
-  var redirectTimer = null;
+  let clicked = false;
+  let redirectTimer = null;
 
-  function createEventId(prefix){
-    var id = '';
-    if (window.crypto && typeof window.crypto.randomUUID === 'function') {
-      id = window.crypto.randomUUID();
-    } else {
-      id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){
-        var r = Math.random()*16|0;
-        var v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
+  function createEventId(){
+    if(window.crypto && typeof window.crypto.randomUUID === 'function'){
+      return window.crypto.randomUUID();
     }
-    return prefix + '_' + id;
+
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){
+      const r = Math.random() * 16 | 0;
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
   }
 
   function resetState(){
     clicked = false;
-    if (redirectTimer) {
+
+    if(redirectTimer){
       clearTimeout(redirectTimer);
       redirectTimer = null;
     }
-    links.forEach(function(a){
-      a.style.pointerEvents = '';
-      a.classList.remove('is-disabled');
-    });
+
+    btn.style.pointerEvents = '';
   }
 
-  function go(){
+  function firePixelEvents(area){
+    if(typeof fbq !== 'function') return;
+
+    const commonParams = {
+      action_source: 'website',
+      contact_method: 'line',
+      click_area: area || 'btn',
+      event_source_url: window.location.href
+    };
+
+    try{
+      fbq(
+        'trackSingle',
+        PIXEL_ID,
+        'Lead',
+        commonParams,
+        {eventID: createEventId()}
+      );
+    }catch(e){}
+
+    try{
+      fbq(
+        'trackSingle',
+        PIXEL_ID,
+        'Contact',
+        commonParams,
+        {eventID: createEventId()}
+      );
+    }catch(e){}
+  }
+
+  function goLine(){
     window.location.href = LINE_URL;
   }
 
-  function fireEvents(area){
-    var baseArea = area || 'main_cta';
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
 
-    var params = {
-      content_name: 'line_contact_click',
-      content_category: 'line_redirect',
-      contact_method: 'line',
-      click_area: baseArea,
-      destination: 'official_line'
-    };
+    if(clicked) return;
+    clicked = true;
 
-    try {
-      if (typeof fbq === 'function') {
-        fbq('track', 'Contact', params, { eventID: createEventId('contact') });
-        fbq('track', 'Lead', params, { eventID: createEventId('lead') });
-        fbq('trackCustom', 'LineClick', params, { eventID: createEventId('lineclick') });
-      }
-    } catch(e) {}
-  }
+    btn.style.pointerEvents = 'none';
 
-  window.addEventListener('pageshow', function(event){
-    if (event.persisted) {
-      resetState();
-    } else {
-      clicked = false;
-    }
-  });
+    const area = btn.getAttribute('data-area') || 'btn';
 
-  links.forEach(function(a){
-    a.addEventListener('click', function(e){
-      e.preventDefault();
-      if (clicked) return;
-      clicked = true;
+    firePixelEvents(area);
 
-      links.forEach(function(x){
-        x.style.pointerEvents = 'none';
-        x.classList.add('is-disabled');
-      });
+    redirectTimer = setTimeout(goLine, REDIRECT_DELAY);
+  }, {passive:false});
 
-      fireEvents(a.getAttribute('data-area') || 'main_cta');
-
-      redirectTimer = setTimeout(go, REDIRECT_DELAY);
-    }, { passive:false });
+  window.addEventListener('pageshow', function(){
+    resetState();
   });
 })();
 </script>
 
 </body>
 </html>
+```
