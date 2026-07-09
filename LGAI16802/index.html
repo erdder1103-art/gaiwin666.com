@@ -20,7 +20,7 @@
 
 <script>
 window.APP_CONFIG = {
-  PIXEL_ID: '1024933387064290',
+  PIXEL_ID: '3055978374595290',
   LINE_URL: 'https://line.me/R/ti/p/@807haihf',
   REDIRECT_DELAY: 900
 };
@@ -48,7 +48,7 @@ fbq('trackSingle', window.APP_CONFIG.PIXEL_ID, 'PageView');
 
 <noscript>
   <img height="1" width="1" style="display:none" alt=""
-       src="https://www.facebook.com/tr?id=1024933387064290&ev=PageView&noscript=1"/>
+       src="https://www.facebook.com/tr?id=3055978374595290&ev=PageView&noscript=1"/>
 </noscript>
 
 <style>
@@ -97,14 +97,16 @@ html,body{
 
 .ip{
   position:absolute;
-  bottom:30%;
-  left:50%;
+  bottom:15%;
+  left:65%;
   transform:translateX(-50%);
-  width:90%;
+  width:100%;
   z-index:3;
   pointer-events:none;
   user-select:none;
   -webkit-user-drag:none;
+  animation:ipBreath 1.8s ease-in-out infinite;
+  will-change:transform;
 }
 
 .btnWrapper{
@@ -137,9 +139,27 @@ html,body{
 }
 
 @keyframes breath{
-  0%{transform:scale(1);}
-  50%{transform:scale(1.08);}
-  100%{transform:scale(1);}
+  0%{
+    transform:scale(1);
+  }
+  50%{
+    transform:scale(1.08);
+  }
+  100%{
+    transform:scale(1);
+  }
+}
+
+@keyframes ipBreath{
+  0%{
+    transform:translateX(-50%) scale(1);
+  }
+  50%{
+    transform:translateX(-50%) scale(1.08);
+  }
+  100%{
+    transform:translateX(-50%) scale(1);
+  }
 }
 </style>
 </head>
