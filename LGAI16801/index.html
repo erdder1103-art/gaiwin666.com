@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>瘋狂阿健</title>
+<title>阿健</title>
 
 <script>
 window.APP_CONFIG = {
-  PIXEL_ID: '1471781568051781',
+  PIXEL_ID: '1035006125593871',
   LINE_URL: 'https://line.me/R/ti/p/@042rdsrp',
   REDIRECT_DELAY: 900
 };
@@ -29,13 +29,13 @@ window.APP_CONFIG = {
   s.parentNode.insertBefore(t,s);
 }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
 
-fbq('init', window.APP_CONFIG.PIXEL_ID);
+fbq('init','1035006125593871');
 fbq('trackSingle', window.APP_CONFIG.PIXEL_ID, 'PageView');
 </script>
 
 <noscript>
   <img height="1" width="1" style="display:none" alt=""
-       src="https://www.facebook.com/tr?id=1471781568051781&ev=PageView&noscript=1"/>
+       src="https://www.facebook.com/tr?id=1035006125593871&ev=PageView&noscript=1"/>
 </noscript>
 
 <style>
@@ -146,92 +146,114 @@ html,body{
 
 <script>
 (function(){
-  const PIXEL_ID = window.APP_CONFIG.PIXEL_ID;
-  const LINE_URL = window.APP_CONFIG.LINE_URL;
-  const REDIRECT_DELAY = window.APP_CONFIG.REDIRECT_DELAY;
-
-  const btn = document.getElementById('lineBtn');
-  if(!btn) return;
+  const PIXEL_ID = "1035006125593871";
+  const LINE_URL = "https://line.me/R/ti/p/@042rdsrp";
+  // 建立此品牌專屬 Worker 後，只需把下方網址替換成實際 workers.dev 網址，保留 /track
+  const CAPI_ENDPOINT = "https://lgai16801.skype138388.workers.dev/track";
+  const EVENT_NAME = "CompleteRegistration";
+  const REDIRECT_DELAY_MS = 1800;
 
   let clicked = false;
-  let redirectTimer = null;
 
   function createEventId(){
-    if(window.crypto && typeof window.crypto.randomUUID === 'function'){
-      return window.crypto.randomUUID();
+    if(window.crypto && typeof window.crypto.randomUUID === "function"){
+      return "reg_" + window.crypto.randomUUID();
     }
-
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,function(c){
-      const r = Math.random() * 16 | 0;
-      const v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
+    return "reg_" + Date.now() + "_" + Math.random().toString(36).slice(2,12);
   }
 
-  function resetState(){
-    clicked = false;
-
-    if(redirectTimer){
-      clearTimeout(redirectTimer);
-      redirectTimer = null;
-    }
-
-    btn.style.pointerEvents = '';
+  function getCookie(name){
+    const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const match = document.cookie.match(new RegExp("(?:^|;\\s*)" + escaped + "=([^;]*)"));
+    return match ? decodeURIComponent(match[1]) : "";
   }
 
-  function firePixelEvents(area){
-    if(typeof fbq !== 'function') return;
+  function getFbc(){
+    const cookie = getCookie("_fbc");
+    if(cookie) return cookie;
+    const fbclid = new URLSearchParams(location.search).get("fbclid");
+    return fbclid ? "fb.1." + Date.now() + "." + fbclid : "";
+  }
 
-    const commonParams = {
-      action_source: 'website',
-      contact_method: 'line',
-      click_area: area || 'btn',
-      event_source_url: window.location.href
+  function fireBrowserEvent(eventId, area){
+    if(typeof window.fbq !== "function") return;
+    window.fbq(
+      "trackSingle",
+      PIXEL_ID,
+      EVENT_NAME,
+      {contact_method:"line", click_area:area},
+      {eventID:eventId}
+    );
+  }
+
+  async function fireServerEvent(eventId, area){
+    if(CAPI_ENDPOINT.includes("YOUR-WORKER")){
+      throw new Error("請先設定 CAPI_ENDPOINT");
+    }
+
+    const payload = {
+      event_name: EVENT_NAME,
+      event_id: eventId,
+      event_source_url: location.href,
+      fbp: getCookie("_fbp"),
+      fbc: getFbc(),
+      click_area: area
     };
 
-    try{
-      fbq(
-        'trackSingle',
-        PIXEL_ID,
-        'Lead',
-        commonParams,
-        {eventID: createEventId()}
-      );
-    }catch(e){}
+    const response = await fetch(CAPI_ENDPOINT, {
+      method: "POST",
+      mode: "cors",
+      credentials: "omit",
+      cache: "no-store",
+      keepalive: true,
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(payload)
+    });
 
-    try{
-      fbq(
-        'trackSingle',
-        PIXEL_ID,
-        'Contact',
-        commonParams,
-        {eventID: createEventId()}
-      );
-    }catch(e){}
+    const text = await response.text();
+    let result;
+    try { result = JSON.parse(text); }
+    catch { result = {ok:false,error:"Worker 回應不是 JSON",raw:text}; }
+
+    if(!response.ok || !result.ok){
+      throw new Error(result.error || result.meta_error?.error?.message || "CAPI 送出失敗");
+    }
+    return result;
   }
 
-  function goLine(){
-    window.location.href = LINE_URL;
-  }
+  function goLine(){ location.assign(LINE_URL); }
 
-  btn.addEventListener('click', function(e){
-    e.preventDefault();
+  const buttons = document.querySelectorAll(".goLine");
+  buttons.forEach(function(btn){
+    btn.setAttribute("href", LINE_URL);
+    btn.addEventListener("click", function(e){
+      e.preventDefault();
+      if(clicked) return;
+      clicked = true;
 
-    if(clicked) return;
-    clicked = true;
+      const area = btn.dataset.area || "btn";
+      const eventId = createEventId();
+      fireBrowserEvent(eventId, area);
 
-    btn.style.pointerEvents = 'none';
+      let redirected = false;
+      const redirectOnce = function(){
+        if(redirected) return;
+        redirected = true;
+        goLine();
+      };
 
-    const area = btn.getAttribute('data-area') || 'btn';
-
-    firePixelEvents(area);
-
-    redirectTimer = setTimeout(goLine, REDIRECT_DELAY);
-  }, {passive:false});
-
-  window.addEventListener('pageshow', function(){
-    resetState();
+      const timer = setTimeout(redirectOnce, REDIRECT_DELAY_MS);
+      fireServerEvent(eventId, area)
+        .then(function(result){ console.log("CAPI success", result); })
+        .catch(function(error){ console.error("CAPI error", error); })
+        .finally(function(){
+          clearTimeout(timer);
+          setTimeout(redirectOnce, 250);
+        });
+    }, {passive:false});
   });
+
+  window.addEventListener("pageshow", function(){ clicked = false; });
 })();
 </script>
 </body>
