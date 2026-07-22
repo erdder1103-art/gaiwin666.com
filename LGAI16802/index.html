@@ -52,115 +52,17 @@ fbq('trackSingle', window.APP_CONFIG.PIXEL_ID, 'PageView');
 </noscript>
 
 <style>
-*{
-  box-sizing:border-box;
-}
-
-html,body{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-height:100%;
-  background:#000;
-  font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC",Arial,sans-serif;
-}
-
-.wrapper{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-  min-height:100svh;
-  background:#000;
-}
-
-.frame{
-  position:relative;
-  width:100%;
-  max-width:420px;
-  aspect-ratio:9/16;
-  overflow:hidden;
-  background:#000;
-}
-
-.bg{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  z-index:1;
-  pointer-events:none;
-  user-select:none;
-  -webkit-user-drag:none;
-}
-
-.ip{
-  position:absolute;
-  bottom:25%;
-  left:65%;
-  transform:translateX(-50%);
-  width:100%;
-  z-index:3;
-  pointer-events:none;
-  user-select:none;
-  -webkit-user-drag:none;
-  animation:ipBreath 1.8s ease-in-out infinite;
-  will-change:transform;
-}
-
-.btnWrapper{
-  position:absolute;
-  bottom:13%;
-  left:50%;
-  transform:translateX(-50%);
-  width:80%;
-  z-index:10;
-}
-
-.goLine{
-  display:block;
-  width:100%;
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-  text-decoration:none;
-  outline:none;
-}
-
-.btn{
-  display:block;
-  width:100%;
-  height:auto;
-  cursor:pointer;
-  animation:breath 1.8s ease-in-out infinite;
-  will-change:transform;
-  user-select:none;
-  -webkit-user-drag:none;
-}
-
-@keyframes breath{
-  0%{
-    transform:scale(1);
-  }
-  50%{
-    transform:scale(1.08);
-  }
-  100%{
-    transform:scale(1);
-  }
-}
-
-@keyframes ipBreath{
-  0%{
-    transform:translateX(-50%) scale(1);
-  }
-  50%{
-    transform:translateX(-50%) scale(1.08);
-  }
-  100%{
-    transform:translateX(-50%) scale(1);
-  }
-}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;width:100%;min-height:100%;background:#000;font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC",Arial,sans-serif;}
+.wrapper{display:flex;justify-content:center;align-items:center;min-height:100vh;min-height:100svh;background:#000;}
+.frame{position:relative;width:100%;max-width:420px;aspect-ratio:9/16;overflow:hidden;background:#000;}
+.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;pointer-events:none;user-select:none;-webkit-user-drag:none;}
+.ip{position:absolute;bottom:25%;left:65%;transform:translateX(-50%);width:100%;z-index:3;pointer-events:none;user-select:none;-webkit-user-drag:none;animation:ipBreath 1.8s ease-in-out infinite;will-change:transform;}
+.btnWrapper{position:absolute;bottom:13%;left:50%;transform:translateX(-50%);width:80%;z-index:10;}
+.goLine{display:block;width:100%;cursor:pointer;-webkit-tap-highlight-color:transparent;text-decoration:none;outline:none;}
+.btn{display:block;width:100%;height:auto;cursor:pointer;animation:breath 1.8s ease-in-out infinite;will-change:transform;user-select:none;-webkit-user-drag:none;}
+@keyframes breath{0%{transform:scale(1);}50%{transform:scale(1.08);}100%{transform:scale(1);}}
+@keyframes ipBreath{0%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.08);}100%{transform:translateX(-50%) scale(1);}}
 </style>
 </head>
 
@@ -170,7 +72,6 @@ html,body{
     <img src="assets/bg.jpg" class="bg" alt="" loading="eager" decoding="async">
     <img src="assets/ip.png" class="ip" alt="" loading="eager" decoding="async">
 
-    <!-- 只有真正按鈕 Btn 可以點擊 -->
     <div class="btnWrapper">
       <a href="https://line.me/R/ti/p/@807haihf"
          class="goLine"
@@ -188,18 +89,17 @@ html,body{
 (function(){
   const PIXEL_ID = "2421071578378464";
   const LINE_URL = "https://line.me/R/ti/p/@807haihf";
-  // 建立此品牌專屬 Worker 後，只需把下方網址替換成實際 workers.dev 網址，保留 /track
   const CAPI_ENDPOINT = "https://lgai16802.skype138388.workers.dev/track";
-  const EVENT_NAME = "CompleteRegistration";
   const REDIRECT_DELAY_MS = 1800;
 
   let clicked = false;
 
-  function createEventId(){
+  function createEventId(prefix){
+    const safePrefix = prefix || "evt";
     if(window.crypto && typeof window.crypto.randomUUID === "function"){
-      return "reg_" + window.crypto.randomUUID();
+      return safePrefix + "_" + window.crypto.randomUUID();
     }
-    return "reg_" + Date.now() + "_" + Math.random().toString(36).slice(2,12);
+    return safePrefix + "_" + Date.now() + "_" + Math.random().toString(36).slice(2,12);
   }
 
   function getCookie(name){
@@ -215,24 +115,20 @@ html,body{
     return fbclid ? "fb.1." + Date.now() + "." + fbclid : "";
   }
 
-  function fireBrowserEvent(eventId, area){
+  function fireBrowserEvent(eventName, eventId, area){
     if(typeof window.fbq !== "function") return;
     window.fbq(
       "trackSingle",
       PIXEL_ID,
-      EVENT_NAME,
+      eventName,
       {contact_method:"line", click_area:area},
       {eventID:eventId}
     );
   }
 
-  async function fireServerEvent(eventId, area){
-    if(CAPI_ENDPOINT.includes("YOUR-WORKER")){
-      throw new Error("請先設定 CAPI_ENDPOINT");
-    }
-
+  async function fireServerEvent(eventName, eventId, area){
     const payload = {
-      event_name: EVENT_NAME,
+      event_name: eventName,
       event_id: eventId,
       event_source_url: location.href,
       fbp: getCookie("_fbp"),
@@ -263,35 +159,50 @@ html,body{
 
   function goLine(){ location.assign(LINE_URL); }
 
-  const buttons = document.querySelectorAll(".goLine");
-  buttons.forEach(function(btn){
-    btn.setAttribute("href", LINE_URL);
-    btn.addEventListener("click", function(e){
-      e.preventDefault();
-      if(clicked) return;
-      clicked = true;
+  const button = document.querySelector(".goLine");
+  if(!button) return;
 
-      const area = btn.dataset.area || "btn";
-      const eventId = createEventId();
-      fireBrowserEvent(eventId, area);
+  button.setAttribute("href", LINE_URL);
+  button.addEventListener("click", function(e){
+    e.preventDefault();
+    if(clicked) return;
+    clicked = true;
 
-      let redirected = false;
-      const redirectOnce = function(){
-        if(redirected) return;
-        redirected = true;
-        goLine();
-      };
+    const area = button.dataset.area || "btn";
+    const events = [
+      {eventName:"CompleteRegistration", eventId:createEventId("reg")},
+      {eventName:"Contact", eventId:createEventId("contact")}
+    ];
 
-      const timer = setTimeout(redirectOnce, REDIRECT_DELAY_MS);
-      fireServerEvent(eventId, area)
-        .then(function(result){ console.log("CAPI success", result); })
-        .catch(function(error){ console.error("CAPI error", error); })
-        .finally(function(){
-          clearTimeout(timer);
-          setTimeout(redirectOnce, 250);
-        });
-    }, {passive:false});
-  });
+    events.forEach(function(item){
+      fireBrowserEvent(item.eventName, item.eventId, area);
+    });
+
+    let redirected = false;
+    const redirectOnce = function(){
+      if(redirected) return;
+      redirected = true;
+      goLine();
+    };
+
+    const timer = setTimeout(redirectOnce, REDIRECT_DELAY_MS);
+
+    Promise.allSettled(events.map(function(item){
+      return fireServerEvent(item.eventName, item.eventId, area);
+    })).then(function(results){
+      results.forEach(function(result, index){
+        const eventName = events[index].eventName;
+        if(result.status === "fulfilled"){
+          console.log("CAPI success", eventName, result.value);
+        }else{
+          console.error("CAPI error", eventName, result.reason);
+        }
+      });
+    }).finally(function(){
+      clearTimeout(timer);
+      setTimeout(redirectOnce, 250);
+    });
+  }, {passive:false});
 
   window.addEventListener("pageshow", function(){ clicked = false; });
 })();
